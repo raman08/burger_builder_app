@@ -1,0 +1,30 @@
+import React from 'react';
+
+import classes from './Burger.module.css';
+import BurgerIngerident from './BurgerIngeridents/BurgerIngerident';
+
+function Burger(props) {
+	let transformIngredients = Object.keys(props.ingredints)
+		.map(igKey => {
+			return [...Array(props.ingredints[igKey])].map((_, i) => {
+				return <BurgerIngerident key={igKey + i} type={igKey} />;
+			});
+		})
+		.reduce((arr, el) => {
+			return arr.concat(el);
+		}, []);
+
+	if (transformIngredients.length === 0) {
+		transformIngredients = <p>Please Start Adding Ingredients!</p>;
+	}
+	console.log(transformIngredients);
+	return (
+		<div className={classes.Burger}>
+			<BurgerIngerident type='bread-top' />
+			{transformIngredients}
+			<BurgerIngerident type='bread-bottom' />
+		</div>
+	);
+}
+
+export default Burger;

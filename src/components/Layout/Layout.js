@@ -1,10 +1,11 @@
 import React from 'react';
+import classes from './Layout.module.css';
 
 function Layout(props) {
 	return (
 		<>
-			<div>Toolbar Sidedrawe Backdrop</div>
-			<main>{props.children}</main>
+			<div>Toolbar, Sidedrawer, Backdrop</div>
+			<main className={classes.content}>{props.children}</main>
 		</>
 	);
 }
