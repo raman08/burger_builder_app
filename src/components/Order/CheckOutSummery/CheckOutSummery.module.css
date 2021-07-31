@@ -1,0 +1,11 @@
+.CheckOutSummery {
+	text-align: center;
+	width: 80%;
+	margin: auto;
+}
+
+@media (min-width: 600px) {
+	.CheckOutSummery {
+		width: 500px;
+	}
+}
