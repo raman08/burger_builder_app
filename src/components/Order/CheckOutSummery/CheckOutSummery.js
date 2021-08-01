@@ -9,7 +9,7 @@ function CheckOutSummery(props) {
 		<div className={Classes.CheckOutSummery}>
 			<h1>We hope it taste Well</h1>
 			<div style={{ width: '100%', margin: 'auto' }}>
-				<Burger ingredints={props.ingredints} />
+				<Burger ingredients={props.ingredients} />
 				<Button btnType="Danger" clicked={props.checkOutCanceled}>
 					CANCEL
 				</Button>

@@ -18,7 +18,7 @@ const INGREDIENTS_PRICE = {
 
 class BurgerBuilder extends Component {
 	state = {
-		ingredints: null,
+		ingredients: null,
 		totalPrice: 2,
 		purchasable: false,
 		purchasing: false,
@@ -30,17 +30,17 @@ class BurgerBuilder extends Component {
 		axios
 			.get('/ingredients.json')
 			.then(response => {
-				this.setState({ ingredints: response.data });
+				this.setState({ ingredients: response.data });
 			})
 			.catch(err => {
 				this.setState({ error: true });
 			});
 	}
 
-	updatePurchaseState(ingredints) {
-		const sum = Object.keys(ingredints)
+	updatePurchaseState(ingredients) {
+		const sum = Object.keys(ingredients)
 			.map(key => {
-				return ingredints[key];
+				return ingredients[key];
 			})
 			.reduce((newSum, el) => {
 				return newSum + el;
@@ -50,30 +50,30 @@ class BurgerBuilder extends Component {
 	}
 
 	addIngredientsHandler = type => {
-		const newIngredients = { ...this.state.ingredints };
-		const newCount = this.state.ingredints[type] + 1;
+		const newIngredients = { ...this.state.ingredients };
+		const newCount = this.state.ingredients[type] + 1;
 
 		newIngredients[type] = newCount;
 
 		const newPrice = this.state.totalPrice + INGREDIENTS_PRICE[type];
 
-		this.setState({ ingredints: newIngredients, totalPrice: newPrice });
+		this.setState({ ingredients: newIngredients, totalPrice: newPrice });
 		this.updatePurchaseState(newIngredients);
 	};
 
 	removeIngredientsHandler = type => {
-		if (this.state.ingredints[type] <= 0) {
+		if (this.state.ingredients[type] <= 0) {
 			return;
 		}
 
-		const newIngredients = { ...this.state.ingredints };
-		const newCount = this.state.ingredints[type] - 1;
+		const newIngredients = { ...this.state.ingredients };
+		const newCount = this.state.ingredients[type] - 1;
 
 		newIngredients[type] = newCount;
 
 		const newPrice = this.state.totalPrice - INGREDIENTS_PRICE[type];
 
-		this.setState({ ingredints: newIngredients, totalPrice: newPrice });
+		this.setState({ ingredients: newIngredients, totalPrice: newPrice });
 
 		this.updatePurchaseState(newIngredients);
 	};
@@ -87,42 +87,19 @@ class BurgerBuilder extends Component {
 	};
 
 	purchaseContinueHandler = () => {
-		// this.setState({ loading: true });
-		// // alert('Ordered');
-		// const order = {
-		// 	ingredients: this.state.ingredints,
-		// 	price: this.state.totalPrice,
-		// 	customer: {
-		// 		name: 'Raman',
-		// 		address: {
-		// 			street: 'Test Street',
-		// 			zipCode: '35433',
-		// 			country: 'IN',
-		// 		},
-		// 		email: 'test@test.com',
-		// 		phoneNo: '+917558866223',
-		// 	},
-		// 	dileveryMethod: 'Fastest',
-		// };
-		// axios
-		// 	.post('/orders.json', order)
-		// 	.then(response => {
-		// 		this.setState({ loading: false, purchasing: false });
-		// 	})
-		// 	.catch(err => {
-		// 		this.setState({ loading: false, purchasing: false });
-		// 	});
-
 		const query = [];
-		for (let ing in this.state.ingredints) {
+
+		for (let ing in this.state.ingredients) {
 			query.push(
 				`${encodeURIComponent(ing)}=${encodeURIComponent(
-					this.state.ingredints[ing]
+					this.state.ingredients[ing]
 				)}`
 			);
 		}
+		query.push(`price=${encodeURIComponent(this.state.totalPrice)}`);
 
 		const queryString = query.join('&');
+
 		this.props.history.push({
 			pathname: '/checkout',
 			search: `?${queryString}`,
@@ -131,7 +108,7 @@ class BurgerBuilder extends Component {
 
 	render() {
 		const disabledInfo = {
-			...this.state.ingredints,
+			...this.state.ingredients,
 		};
 
 		for (let key in disabledInfo) {
@@ -146,10 +123,10 @@ class BurgerBuilder extends Component {
 			<Spinner />
 		);
 
-		if (this.state.ingredints) {
+		if (this.state.ingredients) {
 			burger = (
 				<>
-					<Burger ingredints={this.state.ingredints} />
+					<Burger ingredients={this.state.ingredients} />
 
 					<BuildControls
 						ingredientAdded={this.addIngredientsHandler}
@@ -164,7 +141,7 @@ class BurgerBuilder extends Component {
 
 			orderSumery = (
 				<OrderSummery
-					ingredients={this.state.ingredints}
+					ingredients={this.state.ingredients}
 					totalPrice={this.state.totalPrice}
 					purchasedCancelled={this.purchaseCancelHandler}
 					purchaseContinued={this.purchaseContinueHandler}

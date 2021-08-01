@@ -7,11 +7,11 @@ import NavigationItem from './NavigationItem/NavigationItem';
 function NavigationItems(props) {
 	return (
 		<ul className={classes.NavigationItems}>
-			<NavigationItem href='/' active>
+			<NavigationItem href="/" exact>
 				Burger Builder
 			</NavigationItem>
 
-			<NavigationItem href='/checkout'>Checkout</NavigationItem>
+			<NavigationItem href="/orders">Your Orders</NavigationItem>
 		</ul>
 	);
 }

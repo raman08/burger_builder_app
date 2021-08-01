@@ -4,9 +4,9 @@ import classes from './Burger.module.css';
 import BurgerIngerident from './BurgerIngeridents/BurgerIngerident';
 
 function Burger(props) {
-	let transformIngredients = Object.keys(props.ingredints)
+	let transformIngredients = Object.keys(props.ingredients)
 		.map(igKey => {
-			return [...Array(props.ingredints[igKey])].map((_, i) => {
+			return [...Array(props.ingredients[igKey])].map((_, i) => {
 				return <BurgerIngerident key={igKey + i} type={igKey} />;
 			});
 		})
@@ -19,9 +19,9 @@ function Burger(props) {
 	}
 	return (
 		<div className={classes.Burger}>
-			<BurgerIngerident type='bread-top' />
+			<BurgerIngerident type="bread-top" />
 			{transformIngredients}
-			<BurgerIngerident type='bread-bottom' />
+			<BurgerIngerident type="bread-bottom" />
 		</div>
 	);
 }
