@@ -7,26 +7,18 @@ import Modal from '../../components/UI/Modal/Modal';
 import OrderSummery from '../../components/Burger/OrderSummery/OrderSummery';
 import axios from '../../axios_order';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import * as actionType from '../../store/actions';
+import * as burgerBuilderActions from '../../store/actions/index';
 
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 class BurgerBuilder extends Component {
 	state = {
 		purchasing: false,
-		loading: false,
-		error: false,
 	};
 
 	componentDidMount() {
-		// axios
-		// 	.get('/ingredients.json')
-		// 	.then(response => {
-		// 		this.setState({ ingredients: response.data });
-		// 	})
-		// 	.catch(err => {
-		// 		this.setState({ error: true });
-		// 	});
+		console.log('calling mount');
+		this.props.onInitIngredients();
 	}
 
 	updatePurchaseState(ingredients) {
@@ -64,7 +56,7 @@ class BurgerBuilder extends Component {
 
 		let orderSumery = <Spinner />;
 
-		let burger = this.state.error ? (
+		let burger = this.props.error ? (
 			<p>Ingredients Can't Be Loaded</p>
 		) : (
 			<Spinner />
@@ -98,10 +90,6 @@ class BurgerBuilder extends Component {
 			);
 		}
 
-		if (this.state.loading) {
-			orderSumery = <Spinner />;
-		}
-
 		return (
 			<>
 				<Modal
@@ -121,23 +109,23 @@ const mapStateToProps = state => {
 	return {
 		ingredients: state.ingredients,
 		totalPrice: state.totalPrice,
+		error: state.error,
 	};
 };
 
 const mapDispatchToProps = dispatch => {
 	return {
+		onInitIngredients: () => {
+			console.log('dispatching');
+			dispatch(burgerBuilderActions.initIngredients);
+		},
 		onIngredientsAdded: ingName =>
-			dispatch({
-				type: actionType.ADD_INGREDIENT,
-				ingredientName: ingName,
-			}),
+			dispatch(burgerBuilderActions.addIngredient(ingName)),
 		onIngredientsRemoved: ingName =>
-			dispatch({
-				type: actionType.REMOVE_INGREDIENT,
-				ingredientName: ingName,
-			}),
+			dispatch(burgerBuilderActions.removeIngredient(ingName)),
 	};
 };
+
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
