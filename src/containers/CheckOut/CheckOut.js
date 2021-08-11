@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import CheckOutSummery from '../../components/Order/CheckOutSummery/CheckOutSummery';
@@ -15,19 +15,23 @@ class CheckOut extends Component {
 	};
 
 	render() {
-		return (
-			<div>
-				<CheckOutSummery
-					ingredients={this.props.ingredients}
-					checkOutCanceled={this.checkOutCanceledHandler}
-					checkOutContinued={this.checkOutContinuedHandler}
-				/>
-				<Route
-					path={`${this.props.match.url}/contact`}
-					component={ContactData}
-				/>
-			</div>
-		);
+		let summery = <Redirect to="/" />;
+		if (this.props.ingredients) {
+			summery = (
+				<div>
+					<CheckOutSummery
+						ingredients={this.props.ingredients}
+						checkOutCanceled={this.checkOutCanceledHandler}
+						checkOutContinued={this.checkOutContinuedHandler}
+					/>
+					<Route
+						path={`${this.props.match.url}/contact`}
+						component={ContactData}
+					/>
+				</div>
+			);
+		}
+		return summery;
 	}
 }
 
