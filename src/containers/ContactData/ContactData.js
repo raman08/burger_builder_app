@@ -129,7 +129,7 @@ export class ContactData extends Component {
 
 		const order = {
 			ingredients: this.props.ingredients,
-			price: this.props.price,
+			price: this.props.totalPrice,
 			orderData: formData,
 		};
 
@@ -208,17 +208,16 @@ export class ContactData extends Component {
 
 const mapStateToProps = state => {
 	return {
-		ingredients: state.ingredients,
-		totalPrice: state.totalPrice,
-		loading: state.loading,
+		ingredients: state.burgerBuilder.ingredients,
+		totalPrice: state.burgerBuilder.totalPrice,
+		loading: state.order.loading,
 	};
 };
 
 const dispatchToProps = dispatch => {
 	return {
-		onOrderBurger: dispatch(orderData =>
-			orderActions.purchaseBurger(orderData)
-		),
+		onOrderBurger: orderData =>
+			dispatch(orderActions.purchaseBurger(orderData)),
 	};
 };
 

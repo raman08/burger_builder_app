@@ -17,7 +17,6 @@ class BurgerBuilder extends Component {
 	};
 
 	componentDidMount() {
-		console.log('calling mount');
 		this.props.onInitIngredients();
 	}
 
@@ -42,6 +41,7 @@ class BurgerBuilder extends Component {
 	};
 
 	purchaseContinueHandler = () => {
+		this.props.onInitPurchase();
 		this.props.history.push('/checkout');
 	};
 
@@ -107,22 +107,24 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = state => {
 	return {
-		ingredients: state.ingredients,
-		totalPrice: state.totalPrice,
-		error: state.error,
+		ingredients: state.burgerBuilder.ingredients,
+		totalPrice: state.burgerBuilder.totalPrice,
+		error: state.burgerBuilder.error,
 	};
 };
 
 const mapDispatchToProps = dispatch => {
 	return {
 		onInitIngredients: () =>
-			dispatch(burgerBuilderActions.initIngredients()),
+			dispatch(burgerBuilderActions.initIngredients('hello')),
 
 		onIngredientsAdded: ingName =>
 			dispatch(burgerBuilderActions.addIngredient(ingName)),
 
 		onIngredientsRemoved: ingName =>
 			dispatch(burgerBuilderActions.removeIngredient(ingName)),
+
+		onInitPurchase: () => dispatch(burgerBuilderActions.purchaseInit()),
 	};
 };
 
