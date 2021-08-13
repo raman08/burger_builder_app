@@ -12,6 +12,7 @@ function NavigationItems(props) {
 			</NavigationItem>
 
 			<NavigationItem href="/orders">Your Orders</NavigationItem>
+			<NavigationItem href="/auth">Login</NavigationItem>
 		</ul>
 	);
 }
