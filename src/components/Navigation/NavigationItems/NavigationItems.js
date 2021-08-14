@@ -11,8 +11,15 @@ function NavigationItems(props) {
 				Burger Builder
 			</NavigationItem>
 
-			<NavigationItem href="/orders">Your Orders</NavigationItem>
-			<NavigationItem href="/auth">Login</NavigationItem>
+			{props.isAuth ? (
+				<NavigationItem href="/orders">Your Orders</NavigationItem>
+			) : null}
+
+			{!props.isAuth ? (
+				<NavigationItem href="/auth">Login/Signup</NavigationItem>
+			) : (
+				<NavigationItem href="/logout">Logout</NavigationItem>
+			)}
 		</ul>
 	);
 }

@@ -22,7 +22,7 @@ export const _authFailed = error => {
 	};
 };
 
-export const _logOut = () => {
+export const logOut = () => {
 	return {
 		type: actionTypes.AUTH_LOGOUT,
 	};
@@ -31,8 +31,15 @@ export const _logOut = () => {
 export const _checkAuthTimeout = expTime => {
 	return dispatch => {
 		setTimeout(() => {
-			dispatch(_logOut());
+			dispatch(logOut());
 		}, expTime * 1000);
+	};
+};
+
+export const setAuthRedirectPath = path => {
+	return {
+		type: actionTypes.SET_AUTH_REDIRECT_PATH,
+		path: path,
 	};
 };
 

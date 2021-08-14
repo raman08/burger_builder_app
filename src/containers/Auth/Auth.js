@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
@@ -10,17 +11,6 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 export class Auth extends Component {
 	state = {
 		controls: {
-			// name: {
-			// 	elementType: 'input',
-			// 	elementConfig: {
-			// 		type: 'text',
-			// 		placeholder: 'Your Name',
-			// 	},
-			// 	value: '',
-			// 	validation: { required: true },
-			// 	valid: false,
-			// 	touched: false,
-			// },
 			email: {
 				elementType: 'input',
 				elementConfig: {
@@ -44,8 +34,14 @@ export class Auth extends Component {
 				touched: false,
 			},
 		},
-		isSignup: true,
+		isSignup: false,
 	};
+
+	componentWillMount() {
+		if (!this.props.buildingBurger && this.props.authRedirectPath !== '/') {
+			this.props.onSetAuthRedirectPath();
+		}
+	}
 
 	checkValidity(value, rules) {
 		let isValid = true;
@@ -142,20 +138,48 @@ export class Auth extends Component {
 			errorMessage = <p>{this.props.error.message}</p>;
 		}
 
+		let authRedirect = null;
+
+		if (this.props.isAuth) {
+			authRedirect = <Redirect to={this.props.authRedirectPath} />;
+		}
+
 		return (
 			<div className={styles.AuthContainer}>
+				{authRedirect}
 				<div className={styles.Auth}>
 					{errorMessage}
+
+					{this.state.isSignup ? (
+						<h3>Create a new Account</h3>
+					) : (
+						<h3>Welcome Back</h3>
+					)}
+
 					<form onSubmit={event => this.submitHandler(event)}>
 						{form}
 						<Button btnType="Success">Submit</Button>
 					</form>
-					<Button
-						btnType="Danger"
-						clicked={this.swhichAuthModeHandler}
-					>
-						Swhich to {this.state.isSignup ? 'SignIn' : 'SignUp'}
-					</Button>
+
+					{this.state.isSignup ? (
+						<>
+							<p>
+								<strong>Alredy have an account?</strong>
+							</p>
+							<button onClick={this.swhichAuthModeHandler}>
+								Sign In
+							</button>
+						</>
+					) : (
+						<>
+							<p>
+								<strong>New User?</strong>
+							</p>
+							<button onClick={this.swhichAuthModeHandler}>
+								Sign Up
+							</button>
+						</>
+					)}
 				</div>
 			</div>
 		);
@@ -166,6 +190,9 @@ const mapStateToProps = state => {
 	return {
 		loading: state.auth.loading,
 		error: state.auth.error,
+		isAuth: state.auth.token != null,
+		buildingBurger: state.burgerBuilder.building,
+		authRedirectPath: state.auth.authRedirect,
 	};
 };
 
@@ -173,6 +200,8 @@ const mapDispatchToProps = dispatch => {
 	return {
 		onAuth: (email, password, isSignup) =>
 			dispatch(actions.auth(email, password, isSignup)),
+		onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/')),
 	};
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);
