@@ -28,9 +28,8 @@ const _fetchIngredientsFailed = () => {
 	};
 };
 
-export const initIngredients = test => {
+export const initIngredients = () => {
 	return dispatch => {
-		console.log(test);
 		axios
 			.get(
 				'https://burger-builder-b0ca0-default-rtdb.firebaseio.com/ingredients.json'
